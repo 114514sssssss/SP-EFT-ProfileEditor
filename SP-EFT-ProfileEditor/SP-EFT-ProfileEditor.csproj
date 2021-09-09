@@ -14,6 +14,7 @@
   <PropertyGroup>
     <ApplicationIcon>killa_ico_k3r_icon.ico</ApplicationIcon>
     <ApplicationManifest>app.manifest</ApplicationManifest>
+    <RepositoryUrl>https://github.com/SkiTles55/SP-EFT-ProfileEditor</RepositoryUrl>
   </PropertyGroup>
   <ItemGroup>
     <Resource Include="killa_ico_k3r_icon.ico" />

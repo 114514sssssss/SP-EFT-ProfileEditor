@@ -42,6 +42,7 @@ namespace SP_EFT_ProfileEditor
         private ObservableCollection<SkillInfo> masteringSkills;
         private List<CharacterHideoutArea> HideoutAreas;
         private ObservableCollection<TraderInfo> traderInfos;
+        private Dictionary<string, TraderBase> TraderBases;
         private List<Quest> Quests;
         private Dictionary<string, Item> itemsDB;
         private List<ExaminedItem> examinedItems;
@@ -49,8 +50,9 @@ namespace SP_EFT_ProfileEditor
         private ServerGlobals serverGlobals;
         private ObservableCollection<SuitInfo> Suits;
         private List<PresetInfo> Presets;
-        public Dictionary<string, BotType> BotTypes;
         private Dictionary<string, string> Pockets;
+        private Dictionary<string, string> Heads;
+        private Dictionary<string, string> Voices;
 
         private readonly string moneyRub = "5449016a4bdc2d6f028b456f";
         private readonly string moneyDol = "5696686a4bdc2da3298b456a";
@@ -90,7 +92,7 @@ namespace SP_EFT_ProfileEditor
 
         public MainWindow()
         {
-            //AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
             InitializeComponent();
             infotab_Side.ItemsSource = new List<string> { "Bear", "Usec" };
             QuestsStatusesBox.ItemsSource = new List<string> { "Locked", "AvailableForStart", "Started", "Fail", "AvailableForFinish", "Success" };
@@ -322,9 +324,23 @@ namespace SP_EFT_ProfileEditor
             globalLang = JsonConvert.DeserializeObject<GlobalLang>(File.ReadAllText(Path.Combine(Lang.options.EftServerPath, Lang.options.DirsList["dir_globals"], Lang.options.Language + ".json")));
             itemsDB = new Dictionary<string, Item>();
             itemsDB = JsonConvert.DeserializeObject<Dictionary<string, Item>>(File.ReadAllText(Path.Combine(Lang.options.EftServerPath, Lang.options.FilesList["file_items"])));
-            BotTypes = new Dictionary<string, BotType>();
-            BotTypes.Add("Bear", JsonConvert.DeserializeObject<BotType>(File.ReadAllText(Path.Combine(Lang.options.EftServerPath, Lang.options.FilesList["file_bear"]))));
-            BotTypes.Add("Usec", JsonConvert.DeserializeObject<BotType>(File.ReadAllText(Path.Combine(Lang.options.EftServerPath, Lang.options.FilesList["file_usec"]))));
+            Pockets = new Dictionary<string, string>();
+            foreach (var item in itemsDB.Where(x => x.Value.parent == "557596e64bdc2dc2118b4571" && itemsDB.ContainsKey(x.Key)))
+                Pockets.Add(item.Key, $"{globalLang.Templates[item.Key].Name} ({GetSlotsCount(itemsDB[item.Key])})");
+            Heads = new Dictionary<string, string>();
+            Voices = new Dictionary<string, string>();
+            foreach (var btype in Directory.GetFiles(Path.Combine(Lang.options.EftServerPath, Lang.options.DirsList["dir_bots"])))
+            {
+                BotType bot = JsonConvert.DeserializeObject<BotType>(File.ReadAllText(btype));
+                if (bot.appearance.head != null)
+                    foreach (var head in bot.appearance.head)
+                        if (!Heads.ContainsKey(head))
+                            Heads.Add(head, head);
+                if (bot.appearance.voice != null)
+                    foreach (var voice in bot.appearance.voice)
+                        if (!Voices.ContainsKey(voice))
+                            Voices.Add(voice, voice);
+            }
             if (Lang.Character.Quests != null)
             {
                 Quests = new List<Quest>();
@@ -392,14 +408,27 @@ namespace SP_EFT_ProfileEditor
             }
             if (Lang.Character.TraderStandings != null)
             {
+                TraderBases = new Dictionary<string, TraderBase>();
+                foreach (var tbase in Directory.GetDirectories(Path.Combine(Lang.options.EftServerPath, Lang.options.DirsList["dir_traders"])))
+                {
+                    if (Path.GetFileNameWithoutExtension(tbase) == "ragfair") continue;
+                    TraderBases.Add(Path.GetFileNameWithoutExtension(tbase), JsonConvert.DeserializeObject<TraderBase>(File.ReadAllText(Path.Combine(tbase, "base.json"))));
+                }
                 traderInfos = new ObservableCollection<TraderInfo>();
                 foreach (var mer in Lang.Character.TraderStandings)
                 {
                     if (mer.Key == "ragfair") continue;
-                    List<LoyaltyLevel> loyalties = new List<LoyaltyLevel>();
-                    foreach (var lv in mer.Value.LoyaltyLevels)
-                        loyalties.Add(new LoyaltyLevel { level = Int32.Parse(lv.Key) + 1, SalesSum = lv.Value.MinSalesSum + 1000, Standing = lv.Value.MinStanding + 0.01f });
-                    traderInfos.Add(new TraderInfo { id = mer.Key, name = globalLang.Traders.ContainsKey(mer.Key) ? globalLang.Traders[mer.Key].Nickname : mer.Key, CurrentLevel = mer.Value.CurrentLevel, Levels = loyalties, Display = mer.Value.Display });
+                    if (TraderBases.ContainsKey(mer.Key))
+                    {
+                        List<LoyaltyLevel> loyalties = new List<LoyaltyLevel>();
+                        int level = 0;
+                        foreach (var lv in TraderBases[mer.Key].loyaltyLevels)
+                        {
+                            level++;
+                            loyalties.Add(new LoyaltyLevel { level = level, SalesSum = lv.MinSalesSum + 1000, Standing = lv.MinStanding + 0.01f });
+                        }
+                        traderInfos.Add(new TraderInfo { id = mer.Key, name = globalLang.Traders.ContainsKey(mer.Key) ? globalLang.Traders[mer.Key].Nickname : mer.Key, CurrentLevel = mer.Value.CurrentLevel, Levels = loyalties, Display = mer.Value.Display });
+                    }
                 }
             }
             if (Lang.Character.Hideout != null)
@@ -535,8 +564,6 @@ namespace SP_EFT_ProfileEditor
                         ModItemsWarning.Visibility = Visibility.Visible;
                 }
                 CheckPockets();
-                if (Lang.Character.Info != null && BotTypes != null && BotTypes.ContainsKey(Lang.Character.Info.Side))
-                    SetHeadsAndVoices();
             });
         }
 
@@ -572,28 +599,45 @@ namespace SP_EFT_ProfileEditor
         #endregion
 
         #region Tab Info
-        private void SetHeadsAndVoices()
-        {
-            infotab_Voice.ItemsSource = BotTypes[Lang.Character.Info.Side].appearance.voice;
-            infotab_Head.ItemsSource = BotTypes[Lang.Character.Info.Side].appearance.head.Select(x => globalLang.Customization.ContainsKey(x) ? new KeyValuePair<string, string>(x, globalLang.Customization[x].Name) : new KeyValuePair<string, string>(x, x));
-        }
-
         private void CheckPockets()
         {
             if (itemsDB != null)
             {
-                Pockets = new Dictionary<string, string>();
-                foreach (var item in itemsDB.Where(x => x.Value.parent == "557596e64bdc2dc2118b4571" && itemsDB.ContainsKey(x.Key)))
-                    Pockets.Add(item.Key, $"{globalLang.Templates[item.Key].Name} ({GetSlotsCount(itemsDB[item.Key])})");
                 Dispatcher.Invoke(() =>
                 {
                     infotab_Pockets.ItemsSource = null;
                     infotab_Pockets.ItemsSource = Pockets;
+                    infotab_Voice.ItemsSource = null;
+                    infotab_Voice.ItemsSource = Voices;
+                    infotab_Voice.SelectedValue = Lang.Character.Info.Voice;
+                    infotab_Head.ItemsSource = null;
+                    infotab_Head.ItemsSource = Heads;
+                    infotab_Head.SelectedValue = Lang.Character.Customization.Head;
                 });                
                 if (Lang.Character == null || Lang.Character.Inventory == null) return;
                 var pockets = Lang.Character.Inventory.Items.Where(x => x.SlotId == "Pockets").FirstOrDefault();
                 if (pockets != null)
                     Dispatcher.Invoke(() => { infotab_Pockets.SelectedValue = pockets.Tpl; });
+            }
+        }
+
+        private void infotab_Voice_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var comboBox = sender as System.Windows.Controls.ComboBox;
+            if (comboBox.SelectedItem != null)
+            {
+                KeyValuePair<string, string> selected = (KeyValuePair<string, string>)comboBox.SelectedItem;
+                Lang.Character.Info.Voice = selected.Key;
+            }
+        }
+
+        private void infotab_Head_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var comboBox = sender as System.Windows.Controls.ComboBox;
+            if (comboBox.SelectedItem != null)
+            {
+                KeyValuePair<string, string> selected = (KeyValuePair<string, string>)comboBox.SelectedItem;
+                Lang.Character.Customization.Head = selected.Key;
             }
         }
 
@@ -607,18 +651,6 @@ namespace SP_EFT_ProfileEditor
                 if (pockets != null)
                     pockets.Tpl = selected.Key;
             }            
-        }
-
-        private void infotab_Side_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (!IsLoaded)
-                return;
-            if (Lang.Character != null && Lang.Character.Info != null && BotTypes != null && BotTypes.ContainsKey(Lang.Character.Info.Side))
-                SetHeadsAndVoices();
-            if (infotab_Voice.Items.Count > 0 && !infotab_Voice.Items.Contains(infotab_Voice.SelectedItem))
-                infotab_Voice.SelectedIndex = 0;
-            if (infotab_Head.Items.Count > 0 && !infotab_Head.Items.Contains(infotab_Head.SelectedItem))
-                infotab_Head.SelectedIndex = 0;
         }
 
         private void infotab_Level_TextChanged(object sender, TextChangedEventArgs e)
@@ -653,14 +685,18 @@ namespace SP_EFT_ProfileEditor
 
         private void MerchantsMaximumButton_Click(object sender, RoutedEventArgs e)
         {
-            if (traderInfos == null) return;
+            if (traderInfos == null || TraderBases == null) return;
             foreach (var tr in Lang.Character.TraderStandings)
             {
-                var max = tr.Value.LoyaltyLevels.Last();
-                tr.Value.CurrentLevel = Int32.Parse(max.Key) + 1;
-                tr.Value.Display = true;
-                if (tr.Value.CurrentSalesSum < max.Value.MinSalesSum + 1000) tr.Value.CurrentSalesSum = max.Value.MinSalesSum + 1000;
-                if (tr.Value.CurrentStanding < max.Value.MinStanding + 0.01f) tr.Value.CurrentStanding = max.Value.MinStanding + 0.01f;
+                if (TraderBases.ContainsKey(tr.Key))
+                {
+                    var max = TraderBases[tr.Key].loyaltyLevels.Count();
+                    var last = TraderBases[tr.Key].loyaltyLevels.Last();
+                    tr.Value.CurrentLevel = max;
+                    tr.Value.Display = true;
+                    if (tr.Value.CurrentSalesSum < last.MinSalesSum + 1000) tr.Value.CurrentSalesSum = last.MinSalesSum + 1000;
+                    if (tr.Value.CurrentStanding < last.MinStanding + 0.01f) tr.Value.CurrentStanding = last.MinStanding + 0.01f;
+                }
             }
             PrepareForLoadData();
         }
@@ -1564,10 +1600,10 @@ namespace SP_EFT_ProfileEditor
             }
             foreach (var tr in Lang.Character.TraderStandings)
             {
-                jobject.SelectToken("characters")["pmc"].SelectToken("TraderStandings").SelectToken(tr.Key)["currentLevel"] = Lang.Character.TraderStandings[tr.Key].CurrentLevel;
-                jobject.SelectToken("characters")["pmc"].SelectToken("TraderStandings").SelectToken(tr.Key)["currentSalesSum"] = Lang.Character.TraderStandings[tr.Key].CurrentSalesSum;
-                jobject.SelectToken("characters")["pmc"].SelectToken("TraderStandings").SelectToken(tr.Key)["currentStanding"] = Lang.Character.TraderStandings[tr.Key].CurrentStanding;
-                jobject.SelectToken("characters")["pmc"].SelectToken("TraderStandings").SelectToken(tr.Key)["display"] = Lang.Character.TraderStandings[tr.Key].Display;
+                jobject.SelectToken("characters")["pmc"].SelectToken("TradersInfo").SelectToken(tr.Key)["loyaltyLevel"] = Lang.Character.TraderStandings[tr.Key].CurrentLevel;
+                jobject.SelectToken("characters")["pmc"].SelectToken("TradersInfo").SelectToken(tr.Key)["salesSum"] = Lang.Character.TraderStandings[tr.Key].CurrentSalesSum;
+                jobject.SelectToken("characters")["pmc"].SelectToken("TradersInfo").SelectToken(tr.Key)["standing"] = Lang.Character.TraderStandings[tr.Key].CurrentStanding;
+                jobject.SelectToken("characters")["pmc"].SelectToken("TradersInfo").SelectToken(tr.Key)["unlocked"] = Lang.Character.TraderStandings[tr.Key].Display;
             }
             if (Lang.Character.Quests.Count() > 0)
             {

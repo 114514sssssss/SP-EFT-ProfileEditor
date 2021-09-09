@@ -184,13 +184,13 @@
                             <TextBlock TextWrapping="Wrap" Text="{Binding locale[tab_info_side]}"/>
                         </Label.Content>
                     </Label>
-                    <ComboBox x:Name="infotab_Side" Grid.Column="1" Grid.Row="2" Margin="10,0" VerticalAlignment="Center" SelectedItem="{Binding Character.Info.Side, Mode=TwoWay}" SelectionChanged="infotab_Side_SelectionChanged"/>
+                    <ComboBox x:Name="infotab_Side" Grid.Column="1" Grid.Row="2" Margin="10,0" VerticalAlignment="Center" SelectedItem="{Binding Character.Info.Side, Mode=TwoWay}"/>
                     <Label Grid.Column="0" Grid.Row="3" HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="Bold" Margin="10,0,0,0">
                         <Label.Content>
                             <TextBlock TextWrapping="Wrap" Text="{Binding locale[tab_info_voice]}"/>
                         </Label.Content>
                     </Label>
-                    <ComboBox x:Name="infotab_Voice" Grid.Column="1" Grid.Row="3" Margin="10,0" VerticalAlignment="Center" SelectedItem="{Binding Character.Info.Voice, Mode=TwoWay}"/>
+                    <ComboBox x:Name="infotab_Voice" Grid.Column="1" Grid.Row="3" Margin="10,0" VerticalAlignment="Center" DisplayMemberPath="Value" SelectedValuePath="Key" SelectionChanged="infotab_Voice_SelectionChanged"/>
                     <Label Grid.Column="0" Grid.Row="4" HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="Bold" Margin="10,0,0,0">
                         <Label.Content>
                             <TextBlock TextWrapping="Wrap" Text="{Binding locale[tab_info_level]}"/>
@@ -221,7 +221,7 @@
                             <TextBlock TextWrapping="Wrap" Text="{Binding locale[tab_info_head]}"/>
                         </Label.Content>
                     </Label>
-                    <ComboBox x:Name="infotab_Head" Grid.Column="1" Grid.Row="7" Margin="10,0" VerticalAlignment="Center" DisplayMemberPath="Value" SelectedValuePath="Key" SelectedValue="{Binding Character.Customization.Head, Mode=TwoWay}"/>
+                    <ComboBox x:Name="infotab_Head" Grid.Column="1" Grid.Row="7" Margin="10,0" VerticalAlignment="Center" DisplayMemberPath="Value" SelectedValuePath="Key" SelectionChanged="infotab_Head_SelectionChanged"/>
                     <Label Grid.Column="0" Grid.Row="8" HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="Bold" Margin="10,0,0,0">
                         <Label.Content>
                             <TextBlock TextWrapping="Wrap" Text="{Binding locale[tab_info_pockets]}"/>
@@ -898,6 +898,9 @@
                     </Label>
                     <TextBlock Margin="6,0,0,5">
                         <Hyperlink NavigateUri="https://yoomoney.ru/to/410015658095326" RequestNavigate="Hyperlink_RequestNavigate" Style="{DynamicResource LinkStyle}">https://yoomoney.ru/to/410015658095326</Hyperlink>
+                    </TextBlock>
+                    <TextBlock Margin="6,0,0,5">
+                        <Hyperlink NavigateUri="https://steamcommunity.com/tradeoffer/new/?partner=350485380%26token=zCrhUwxR" RequestNavigate="Hyperlink_RequestNavigate" Style="{DynamicResource LinkStyle}">Steam Trade Offer Link</Hyperlink>
                     </TextBlock>
                     <Label Style="{DynamicResource DescriptionHeaderStyle}" Margin="0,5,0,0">
                         <Label.Content>

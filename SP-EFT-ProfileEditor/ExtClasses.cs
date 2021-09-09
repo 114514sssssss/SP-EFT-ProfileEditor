@@ -112,6 +112,23 @@ namespace SP_EFT_ProfileEditor
         public List<LoyaltyLevel> Levels { get; set; }
     }
 
+    public class TraderBase
+    {
+        public LoyalityLevels[] loyaltyLevels { get; set; }
+
+        public class LoyalityLevels
+        {
+            [JsonProperty("minLevel")]
+            public int MinLevel { get; set; } // 22,
+
+            [JsonProperty("minSalesSum")]
+            public long MinSalesSum { get; set; } // 1500000,
+
+            [JsonProperty("minStanding")]
+            public float MinStanding { get; set; } // 0.35
+        }
+    }
+
     public class LoyaltyLevel
     {
         public int level { get; set; }

@@ -41,7 +41,7 @@ namespace SP_EFT_ProfileEditor
         [JsonProperty("Quests")]
         public Character_Quests[] Quests { get; set; }
 
-        [JsonProperty("TraderStandings")]
+        [JsonProperty("TradersInfo")]
         public Dictionary<string, Character_TraderStandings> TraderStandings { get; set; }
 
         public List<string> Suits { get; set; }
@@ -408,32 +408,17 @@ namespace SP_EFT_ProfileEditor
 
         public class Character_TraderStandings
         {
-            [JsonProperty("currentLevel")]
+            [JsonProperty("loyaltyLevel")]
             public int CurrentLevel { get; set; } // 4,
 
-            [JsonProperty("currentSalesSum")]
+            [JsonProperty("salesSum")]
             public long CurrentSalesSum { get; set; } // 3474588,
 
-            [JsonProperty("currentStanding")]
+            [JsonProperty("standing")]
             public float CurrentStanding { get; set; } // 2.52,
 
-            [JsonProperty("loyaltyLevels")]
-            public Dictionary<string, Character_TraderStandings_LoyaltyLevels> LoyaltyLevels { get; set; }
-
-            [JsonProperty("display")]
+            [JsonProperty("unlocked")]
             public bool Display { get; set; } // true
-
-            public class Character_TraderStandings_LoyaltyLevels
-            {
-                [JsonProperty("minLevel")]
-                public int MinLevel { get; set; } // 22,
-
-                [JsonProperty("minSalesSum")]
-                public long MinSalesSum { get; set; } // 1500000,
-
-                [JsonProperty("minStanding")]
-                public float MinStanding { get; set; } // 0.35
-            }
         }
 
         // Helpers

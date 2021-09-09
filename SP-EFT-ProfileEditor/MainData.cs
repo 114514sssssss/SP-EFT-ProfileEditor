@@ -114,6 +114,7 @@ namespace SP_EFT_ProfileEditor
                     {
                         ["dir_globals"] = "Aki_Data\\Server\\database\\locales\\global",
                         ["dir_traders"] = "Aki_Data\\Server\\database\\traders",
+                        ["dir_bots"] = "Aki_Data\\Server\\database\\bots\\types",
                         ["dir_profiles"] = "user\\profiles"
                     },
                     FilesList = new Dictionary<string, string>
@@ -121,8 +122,6 @@ namespace SP_EFT_ProfileEditor
                         ["file_globals"] = "Aki_Data\\Server\\database\\globals.json",
                         ["file_items"] = "Aki_Data\\Server\\database\\templates\\items.json",
                         ["file_quests"] = "Aki_Data\\Server\\database\\templates\\quests.json",
-                        ["file_usec"] = "Aki_Data\\Server\\database\\bots\\types\\usec.json",
-                        ["file_bear"] = "Aki_Data\\Server\\database\\bots\\types\\bear.json",
                         ["file_areas"] = "Aki_Data\\Server\\database\\hideout\\areas.json",
                         ["file_serverexe"] = "Server.exe"
                     }
