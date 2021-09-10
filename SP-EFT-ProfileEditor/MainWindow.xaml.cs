@@ -335,7 +335,7 @@ namespace SP_EFT_ProfileEditor
                 if (bot.appearance.head != null)
                     foreach (var head in bot.appearance.head)
                         if (!Heads.ContainsKey(head))
-                            Heads.Add(head, head);
+                            Heads.Add(head, globalLang.Customization.ContainsKey(head) ? globalLang.Customization[head].Name : head);
                 if (bot.appearance.voice != null)
                     foreach (var voice in bot.appearance.voice)
                         if (!Voices.ContainsKey(voice))
@@ -524,8 +524,8 @@ namespace SP_EFT_ProfileEditor
             LoadBackups();
             Dispatcher.Invoke(() =>
             {
-                infotab_Experience.Maximum = serverGlobals.config.exp.level.exp_table.Sum(x => x.exp) - serverGlobals.config.exp.level.exp_table.Last().exp;
-                infotab_Level.Text = Lang.Character.Info.Level.ToString();
+                infotab_Experience.Value = Lang.Character.Info.Experience;
+                infotab_Experience.Maximum = serverGlobals.config.exp.level.exp_table.Sum(x => x.exp) - (serverGlobals.config.exp.level.exp_table.Last().exp - 200000);
                 MoneysPanel.IsEnabled = true;
                 AddItemsGrid.IsEnabled = true;
                 ModItemsWarning.Visibility = Visibility.Hidden;
