@@ -1315,6 +1315,44 @@ namespace SP_EFT_ProfileEditor
                 textBox.Text = Int32.MaxValue.ToString();
             }
         }
+
+        private void ItemAddSearch_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            ICollectionView cv2 = CollectionViewSource.GetDefaultView(ItemCatSelector.ItemsSource);
+            if (string.IsNullOrEmpty(ItemAddSearch.Text))
+                cv2.Filter = null;
+            else
+            {
+                cv2.Filter = o =>
+                {
+                    KeyValuePair<string, Dictionary<string, string>>? p = o as KeyValuePair<string, Dictionary<string, string>>?;
+                    return string.IsNullOrEmpty(ItemAddSearch.Text) || !p.HasValue || p.Value.Value.Where(x => x.Value.ToUpper().Contains(ItemAddSearch.Text.ToUpper())).Count() > 0;
+                };
+            }
+            ApplyItemAddFilter();
+        }
+
+
+        private void ApplyItemAddFilter()
+        {
+            ICollectionView cv = CollectionViewSource.GetDefaultView(ItemIdSelector.ItemsSource);
+            if (cv != null)
+            {
+                if (string.IsNullOrEmpty(ItemAddSearch.Text))
+                    cv.Filter = null;
+                else
+                {
+                    cv.Filter = o =>
+                    {
+                        KeyValuePair<string, string>? p = o as KeyValuePair<string, string>?;
+                        return string.IsNullOrEmpty(ItemAddSearch.Text) || !p.HasValue || p.Value.Value.ToUpper().Contains(ItemAddSearch.Text.ToUpper());
+                    };
+                }
+            }
+            if (ItemCatSelector.ItemsSource != null && ItemCatSelector.SelectedItem == null)
+                ItemCatSelector.SelectedIndex = 0;
+        }
+        private void ItemCatSelector_SelectionChanged(object sender, SelectionChangedEventArgs e) => ApplyItemAddFilter();
         #endregion
 
         #region Tab Clothing
