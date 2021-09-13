@@ -8,7 +8,7 @@ using System.Windows;
 // набор атрибутов. Измените значения этих атрибутов, чтобы изменить сведения,
 // связанные со сборкой.
 [assembly: AssemblyTitle("SP-EFT-ProfileEditor")]
-[assembly: AssemblyDescription("Редасктор игрового профиля сервера SPT-AKI")]
+[assembly: AssemblyDescription("Редактор игрового профиля сервера SPT-AKI")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("SP-EFT-ProfileEditor")]

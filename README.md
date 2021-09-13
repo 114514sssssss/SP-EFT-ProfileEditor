@@ -38,8 +38,9 @@
   }
 ```
 
+[Версия 1.9 (pre-release) для серверов SPT-AKI 2.0.0-RC1](https://github.com/SkiTles55/SP-EFT-ProfileEditor/releases/tag/1.9)
 
-[Версия 1.8 для серверов SPT-AKI 1.0.0 B*, 1.0.0 - 1.3.0](https://github.com/SkiTles55/SP-EFT-ProfileEditor/releases/tag/1.8)
+[Версия 1.8 для серверов SPT-AKI 1.0.0 B*, 1.0.0 - 1.5.1](https://github.com/SkiTles55/SP-EFT-ProfileEditor/releases/tag/1.8)
 
 [Версия 1.6 для серверов SPT-AKI Alpha R7](https://github.com/SkiTles55/SP-EFT-ProfileEditor/releases/tag/1.6)
 
@@ -99,7 +100,9 @@ Relative paths for server SPT-AKI Alpha R7
   }
 ```
 
-[Version 1.8 for SPT-AKI 1.0.0 B*, 1.0.0 - 1.3.0](https://github.com/SkiTles55/SP-EFT-ProfileEditor/releases/tag/1.8)
+[Version 1.9 (pre-release) for SPT-AKI 2.0.0-RC1](https://github.com/SkiTles55/SP-EFT-ProfileEditor/releases/tag/1.9)
+
+[Version 1.8 for SPT-AKI 1.0.0 B*, 1.0.0 - 1.5.1](https://github.com/SkiTles55/SP-EFT-ProfileEditor/releases/tag/1.8)
 
 [Version 1.6 for SPT-AKI Alpha R7](https://github.com/SkiTles55/SP-EFT-ProfileEditor/releases/tag/1.6)
 
