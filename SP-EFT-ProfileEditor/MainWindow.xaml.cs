@@ -326,7 +326,7 @@ namespace SP_EFT_ProfileEditor
             itemsDB = JsonConvert.DeserializeObject<Dictionary<string, Item>>(File.ReadAllText(Path.Combine(Lang.options.EftServerPath, Lang.options.FilesList["file_items"])));
             Pockets = new Dictionary<string, string>();
             foreach (var item in itemsDB.Where(x => x.Value.parent == "557596e64bdc2dc2118b4571" && itemsDB.ContainsKey(x.Key)))
-                Pockets.Add(item.Key, $"{globalLang.Templates[item.Key].Name} ({GetSlotsCount(itemsDB[item.Key])})");
+                Pockets.Add(item.Key, $"{(globalLang.Templates.ContainsKey(item.Key) ? globalLang.Templates[item.Key].Name : item.Key)} ({GetSlotsCount(itemsDB[item.Key])})");
             Heads = new Dictionary<string, string>();
             Voices = new Dictionary<string, string>();
             foreach (var btype in Directory.GetFiles(Path.Combine(Lang.options.EftServerPath, Lang.options.DirsList["dir_bots"])))
@@ -351,12 +351,12 @@ namespace SP_EFT_ProfileEditor
                     if (Lang.Character.Quests.Where(x => x.Qid == qd._id).Count() > 0)
                     {
                         var quest = Lang.Character.Quests.Where(x => x.Qid == qd._id).FirstOrDefault();
-                        Quests.Add(new Quest { qid = quest.Qid, name = globalLang.Quests[quest.Qid].name, status = quest.Status, trader = globalLang.Traders[qd.traderId].Nickname });
+                        Quests.Add(new Quest { qid = quest.Qid, name = globalLang.Quests.ContainsKey(quest.Qid) ? globalLang.Quests[quest.Qid].name : quest.Qid, status = quest.Status, trader = globalLang.Traders.ContainsKey(qd.traderId) ? globalLang.Traders[qd.traderId].Nickname : qd.traderId });
                     }
                     else
                     {
                         forAdd.Add(new Character.Character_Quests { Qid = qd._id, Status = "Locked", CompletedConditions = new string[0], StartTime = 0, StatusTimers = new Dictionary<string, decimal>() });
-                        Quests.Add(new Quest { qid = qd._id, name = globalLang.Quests[qd._id].name, status = "Locked", trader = globalLang.Traders[qd.traderId].Nickname });
+                        Quests.Add(new Quest { qid = qd._id, name = globalLang.Quests.ContainsKey(qd._id) ? globalLang.Quests[qd._id].name : qd._id, status = "Locked", trader = globalLang.Traders.ContainsKey(qd.traderId) ? globalLang.Traders[qd.traderId].Nickname : qd.traderId });
                     }
                 }
                 foreach (var qd in Lang.Character.Quests)
@@ -436,7 +436,7 @@ namespace SP_EFT_ProfileEditor
                 HideoutAreas = new List<CharacterHideoutArea>();
                 var areas = JsonConvert.DeserializeObject<List<AreaInfo>>(File.ReadAllText(Path.Combine(Lang.options.EftServerPath, Lang.options.FilesList["file_areas"])));
                 foreach (var area in areas)
-                    HideoutAreas.Add(new CharacterHideoutArea { type = area.type, name = globalLang.Interface[$"hideout_area_{area.type}_name"], MaxLevel = area.stages.Count - 1, CurrentLevel = Lang.Character.Hideout.Areas.Where(x => x.Type == area.type).FirstOrDefault().Level, stages = area.stages });
+                    HideoutAreas.Add(new CharacterHideoutArea { type = area.type, name = globalLang.Interface.ContainsKey($"hideout_area_{area.type}_name") ? globalLang.Interface[$"hideout_area_{area.type}_name"] : $"hideout_area_{area.type}_name", MaxLevel = area.stages.Count - 1, CurrentLevel = Lang.Character.Hideout.Areas.Where(x => x.Type == area.type).FirstOrDefault().Level, stages = area.stages });
             }
             if (Lang.Character.Encyclopedia != null)
             {
