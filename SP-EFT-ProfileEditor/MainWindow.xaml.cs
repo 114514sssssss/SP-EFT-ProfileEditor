@@ -111,6 +111,21 @@ namespace SP_EFT_ProfileEditor
         {
             bool readyToLoad = false;
             Lang = MainData.Load();
+            bool resaveOptions = false;
+            foreach (var dir in MainData.DefaultDirsList)
+                if (!Lang.options.DirsList.ContainsKey(dir.Key))
+                {
+                    Lang.options.DirsList.Add(dir.Key, dir.Value);
+                    resaveOptions = true;
+                }
+            foreach (var file in MainData.DefaultFilesList)
+                if (!Lang.options.FilesList.ContainsKey(file.Key))
+                {
+                    Lang.options.FilesList.Add(file.Key, file.Value);
+                    resaveOptions = true;
+                }
+            if (resaveOptions)
+                Lang.SaveOptions();
             if (string.IsNullOrWhiteSpace(Lang.options.Language) || string.IsNullOrWhiteSpace(Lang.options.EftServerPath)
                 || !Directory.Exists(Lang.options.EftServerPath) || !ExtMethods.PathIsEftServerBase(Lang.options)
                 || string.IsNullOrWhiteSpace(Lang.options.DefaultProfile) || !File.Exists(Path.Combine(Lang.options.EftServerPath, Lang.options.DirsList["dir_profiles"], Lang.options.DefaultProfile + ".json")))
@@ -149,7 +164,11 @@ namespace SP_EFT_ProfileEditor
             var mySettings = new MetroDialogSettings { AffirmativeButtonText = Lang.locale["button_yes"], NegativeButtonText = Lang.locale["button_no"], AnimateShow = true, AnimateHide = true, DefaultButtonFocus = MessageDialogResult.Affirmative };
             var result = await this.ShowMessageAsync(Lang.locale["update_avialable"], Lang.locale["update_caption"], MessageDialogStyle.AffirmativeAndNegative, mySettings);
             if (result == MessageDialogResult.Affirmative)
-                Process.Start(new ProcessStartInfo("https://github.com/SkiTles55/SP-EFT-ProfileEditor/releases/latest"));
+            {
+                ProcessStartInfo updateLink = new ProcessStartInfo("https://github.com/SkiTles55/SP-EFT-ProfileEditor/releases/latest");
+                updateLink.UseShellExecute = true;
+                Process.Start(updateLink);
+            }
         }
 
         private void SaveAndReload()

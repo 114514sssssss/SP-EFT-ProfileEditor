@@ -61,7 +61,7 @@ namespace SP_EFT_ProfileEditor
                 case "es":
                     Eth = ES;
                     break;
-            }                
+            }
             bool needReSave = false;
             foreach (var lc in Eth)
             {
@@ -108,24 +108,7 @@ namespace SP_EFT_ProfileEditor
         private static PEOptions CreateOptions()
         {
             if (!File.Exists(PeoPath))
-                return new PEOptions 
-                { 
-                    DirsList = new Dictionary<string, string> 
-                    {
-                        ["dir_globals"] = "Aki_Data\\Server\\database\\locales\\global",
-                        ["dir_traders"] = "Aki_Data\\Server\\database\\traders",
-                        ["dir_bots"] = "Aki_Data\\Server\\database\\bots\\types",
-                        ["dir_profiles"] = "user\\profiles"
-                    },
-                    FilesList = new Dictionary<string, string>
-                    {
-                        ["file_globals"] = "Aki_Data\\Server\\database\\globals.json",
-                        ["file_items"] = "Aki_Data\\Server\\database\\templates\\items.json",
-                        ["file_quests"] = "Aki_Data\\Server\\database\\templates\\quests.json",
-                        ["file_areas"] = "Aki_Data\\Server\\database\\hideout\\areas.json",
-                        ["file_serverexe"] = "Server.exe"
-                    }
-                };
+                return new PEOptions { DirsList = DefaultDirsList, FilesList = DefaultFilesList };
 
             string json = File.ReadAllText(PeoPath);
             PEOptions peo = null;
@@ -163,6 +146,23 @@ namespace SP_EFT_ProfileEditor
         public GridFilters gridFilters { get; set; }
 
         public int ProfileHash { get; set; }
+
+        public static Dictionary<string, string> DefaultDirsList => new Dictionary<string, string>
+        {
+            ["dir_globals"] = "Aki_Data\\Server\\database\\locales\\global",
+            ["dir_traders"] = "Aki_Data\\Server\\database\\traders",
+            ["dir_bots"] = "Aki_Data\\Server\\database\\bots\\types",
+            ["dir_profiles"] = "user\\profiles"
+        };
+
+        public static Dictionary<string, string> DefaultFilesList => new Dictionary<string, string>
+        {
+            ["file_globals"] = "Aki_Data\\Server\\database\\globals.json",
+            ["file_items"] = "Aki_Data\\Server\\database\\templates\\items.json",
+            ["file_quests"] = "Aki_Data\\Server\\database\\templates\\quests.json",
+            ["file_areas"] = "Aki_Data\\Server\\database\\hideout\\areas.json",
+            ["file_serverexe"] = "Server.exe"
+        };
 
         static Dictionary<string, string> EN => new Dictionary<string, string>()
         {
