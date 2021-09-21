@@ -1,5 +1,3 @@
-# Работа над программой окончена, в связи с потерей интереса к проекту SinglePlayerTarkov.
-
 # SP-EFT-ProfileEditor
 Программа для редактирования профиля игрока на сервере SPTarkov
 
@@ -38,7 +36,7 @@
   }
 ```
 
-[Версия 1.9 (pre-release) для серверов SPT-AKI 2.0.0-RC1](https://github.com/SkiTles55/SP-EFT-ProfileEditor/releases/tag/1.9)
+[Версия 1.9 для серверов SPT-AKI 2.0.0](https://github.com/SkiTles55/SP-EFT-ProfileEditor/releases/tag/1.9)
 
 [Версия 1.8 для серверов SPT-AKI 1.0.0 B*, 1.0.0 - 1.5.1](https://github.com/SkiTles55/SP-EFT-ProfileEditor/releases/tag/1.8)
 
@@ -59,8 +57,6 @@
 ![Скриншот3](https://github.com/SkiTles55/SP-EFT-ProfileEditor/blob/master/screenshots/3.JPG?raw=true)
 ![Скриншот4](https://github.com/SkiTles55/SP-EFT-ProfileEditor/blob/master/screenshots/4.JPG?raw=true)
 ![Скриншот5](https://github.com/SkiTles55/SP-EFT-ProfileEditor/blob/master/screenshots/5.JPG?raw=true)
-
-# Work on the program is over, due to loss of interest in the project SinglePlayerTarkov.
 
 # SP-EFT-ProfileEditor ENG Readme
 Program for editing player profile on the SPTarkov Server
@@ -100,7 +96,7 @@ Relative paths for server SPT-AKI Alpha R7
   }
 ```
 
-[Version 1.9 (pre-release) for SPT-AKI 2.0.0-RC1](https://github.com/SkiTles55/SP-EFT-ProfileEditor/releases/tag/1.9)
+[Version 1.9 for SPT-AKI 2.0.0](https://github.com/SkiTles55/SP-EFT-ProfileEditor/releases/tag/1.9)
 
 [Version 1.8 for SPT-AKI 1.0.0 B*, 1.0.0 - 1.5.1](https://github.com/SkiTles55/SP-EFT-ProfileEditor/releases/tag/1.8)
 
