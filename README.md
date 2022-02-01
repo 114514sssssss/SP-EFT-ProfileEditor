@@ -1,6 +1,9 @@
 # SP-EFT-ProfileEditor
 Программа для редактирования профиля игрока на сервере SPTarkov
 
+### [Новая версия 2.0 для сервера SPT-AKI 2.2.0 доступна здесь](https://github.com/SkiTles55/SPT-AKI-Profile-Editor/releases/tag/2.0)
+### [New version 2.0 for server SPT-AKI 2.2.0 available here](https://github.com/SkiTles55/SPT-AKI-Profile-Editor/releases/tag/2.0)
+
 ### Возможности:
 * Уровень, никнейм, голос персонажа
 * Установка обычных \ больших карманов
